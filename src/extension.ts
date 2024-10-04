@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import { SolanaExplorerPanel } from './webview/ExplorerPanel';
 import { Keypair } from '@solana/web3.js';
 import { SolanaWalletPanel } from './webview/WalletPanel';
+import * as path from 'path';
 
 // export class SolanaExplorerPanel {
 //     public static currentPanel: SolanaExplorerPanel | undefined;
@@ -122,26 +123,58 @@ export function activate(context: vscode.ExtensionContext) {
 
     const openWallet = vscode.commands.registerCommand('red-head.openWallet', () => {
 
-        const editor = vscode.window.activeTextEditor;
-        if (editor) {
-            const document = editor.document;
-            const keypairFileContents = document.getText();
-
-            try {
-                const keypair = Keypair.fromSecretKey( Uint8Array.from( JSON.parse(keypairFileContents)) ) 
-                SolanaWalletPanel.createOrShow(keypair)                
-            } catch {
-                vscode.window.showWarningMessage('Could not open active file as a wallet.');
+        const panel = vscode.window.createWebviewPanel(
+            'reactWebview',
+            'React Webview',
+            vscode.ViewColumn.One,
+            {
+                enableScripts: true
             }
+        );
 
-        } else {
-            vscode.window.showWarningMessage('No active editor found');
-        }
+        const scriptPathOnDisk = vscode.Uri.file(
+            path.join(context.extensionPath, 'out', 'webview.js')
+        );
+        const scriptUri = panel.webview.asWebviewUri(scriptPathOnDisk);
+
+        panel.webview.html = getWebviewContent(scriptUri);
+
+
+        // const editor = vscode.window.activeTextEditor;
+        // if (editor) {
+        //     const document = editor.document;
+        //     const keypairFileContents = document.getText();
+
+        //     try {
+        //         const keypair = Keypair.fromSecretKey( Uint8Array.from( JSON.parse(keypairFileContents)) ) 
+        //         SolanaWalletPanel.createOrShow(keypair)                
+        //     } catch {
+        //         vscode.window.showWarningMessage('Could not open active file as a wallet.');
+        //     }
+
+        // } else {
+        //     vscode.window.showWarningMessage('No active editor found');
+        // }
 
 	});
 
 	context.subscriptions.push(disposable);
     context.subscriptions.push(openWallet);
+}
+
+function getWebviewContent(scriptUri: vscode.Uri) {
+    return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>React Webview</title>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script src="${scriptUri}"></script>
+    </body>
+    </html>`;
 }
 
 // This method is called when your extension is deactivated
