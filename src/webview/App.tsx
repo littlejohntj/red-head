@@ -1,9 +1,9 @@
 declare const vscode: any;
 import React from 'react';
+import { Keypair } from '@solana/web3.js';
 
 interface WalletData {
-    address: string;
-    balance: string;
+    keypair: string;
 }
 
 interface AppProps {
@@ -11,11 +11,13 @@ interface AppProps {
 }
 
 const App: React.FC<AppProps> = ({ walletData }) => {
+
+    Keypair.generate()
+    
     return (
         <div>
             <h1>Wallet Information</h1>
-            <p>Address: {walletData.address}</p>
-            <p>Balance: {walletData.balance}</p>
+            <p>Address: {walletData.keypair}</p>
         </div>
     );
 };

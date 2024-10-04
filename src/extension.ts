@@ -42,41 +42,56 @@ export function activate(context: vscode.ExtensionContext) {
 
     const openWallet = vscode.commands.registerCommand('red-head.openWallet', () => {
 
-        const panel = vscode.window.createWebviewPanel(
-            'reactWebview',
-            'React Webview',
-            vscode.ViewColumn.One,
-            {
-                enableScripts: true
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const document = editor.document;
+            const keypairFileContents = document.getText();
+
+            try {
+                const keypair = Keypair.fromSecretKey( Uint8Array.from( JSON.parse(keypairFileContents)) )
+
+                const panel = vscode.window.createWebviewPanel(
+                    'reactWebview',
+                    'React Webview',
+                    vscode.ViewColumn.One,
+                    {
+                        enableScripts: true
+                    }
+                );
+        
+                const scriptPathOnDisk = vscode.Uri.file(
+                    path.join(context.extensionPath, 'out', 'webview.js')
+                );
+                const scriptUri = panel.webview.asWebviewUri(scriptPathOnDisk);
+        
+                // Get data from your extension
+                const walletData = {
+                    keypair: keypairFileContents
+                };
+        
+                // Pass data to webview
+                panel.webview.html = getWebviewContent(scriptUri, walletData);
+        
+                // Handle messages from the webview
+                panel.webview.onDidReceiveMessage(
+                    message => {
+                        switch (message.command) {
+                            case 'alert':
+                                vscode.window.showInformationMessage(message.text);
+                                return;
+                        }
+                    },
+                    undefined,
+                    context.subscriptions
+                );
+
+            } catch {
+                vscode.window.showWarningMessage('Could not open active file as a wallet.');
             }
-        );
 
-        const scriptPathOnDisk = vscode.Uri.file(
-            path.join(context.extensionPath, 'out', 'webview.js')
-        );
-        const scriptUri = panel.webview.asWebviewUri(scriptPathOnDisk);
-
-        // Get data from your extension
-        const walletData = {
-            address: '0x1234...', // Example data
-            balance: '100 SOL'    // Example data
-        };
-
-        // Pass data to webview
-        panel.webview.html = getWebviewContent(scriptUri, walletData);
-
-        // Handle messages from the webview
-        panel.webview.onDidReceiveMessage(
-            message => {
-                switch (message.command) {
-                    case 'alert':
-                        vscode.window.showInformationMessage(message.text);
-                        return;
-                }
-            },
-            undefined,
-            context.subscriptions
-        );
+        } else {
+            vscode.window.showWarningMessage('No active editor found');
+        }
 
 	});
 
@@ -105,20 +120,3 @@ function getWebviewContent(scriptUri: vscode.Uri, data: any) {
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
-
-
-        // const editor = vscode.window.activeTextEditor;
-        // if (editor) {
-        //     const document = editor.document;
-        //     const keypairFileContents = document.getText();
-
-        //     try {
-        //         const keypair = Keypair.fromSecretKey( Uint8Array.from( JSON.parse(keypairFileContents)) ) 
-        //         SolanaWalletPanel.createOrShow(keypair)                
-        //     } catch {
-        //         vscode.window.showWarningMessage('Could not open active file as a wallet.');
-        //     }
-
-        // } else {
-        //     vscode.window.showWarningMessage('No active editor found');
-        // }
