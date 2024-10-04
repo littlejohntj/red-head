@@ -1,5 +1,6 @@
 import React from 'react';
 import { Keypair } from '@solana/web3.js';
+import TabbedComponent from './TabbedComponent'
 
 declare const vscode: any;
 
@@ -19,6 +20,8 @@ const App: React.FC<AppProps> = ({ walletData }) => {
         <div>
             <h1>Wallet Information</h1>
             <p>Address: {keypair.publicKey.toBase58()}</p>
+            <h1>Tokens</h1>
+            <TabbedComponent />
         </div>
     );
 };
