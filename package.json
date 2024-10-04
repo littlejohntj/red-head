@@ -13,10 +13,23 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "properties": {
+        "red-head.rpcUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Your Solana RPC URL. If you do not have one, you can get one for free at https://www.helius.dev"
+        }
+      }
+    },
     "commands": [
       {
         "command": "red-head.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "red-head.openWallet",
+        "title": "Open Wallet"
       }
     ]
   },
