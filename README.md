@@ -1,71 +1,18 @@
 # red-head README
 
-This is the README for your extension "red-head". After writing up a brief description, we recommend including the following sections.
+This Red Head. A VS-Code Extension for Solana Developers. Red Head is literally brand new, so feel free to drop ideas or suggestions as I go.
 
-## Features
+As it stands right now, I aim to have two major features integrated into Red Head.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+1. A simple Wallet that leverages keypairs already in your project.
+2. A Solana explorer that you can use to check account state + transactions while developing.
 
-For example if there is an image subfolder under your extension project workspace:
+## How to run
 
-\!\[feature X\]\(images/feature-x.png\)
+1. npm install
+2. npm run webpack
+3. F5 ( F5 will launch your extension and open a new VS-Code Window where you can then test Red Head )
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## Ideas
+- Right now, I open the "wallet" by being selected on the file with the keypair and running the command, it would be interesting to have a larger "wallet managment view" that you can point at different sources of wallets, maybe just one, maybe on your system idk, but then you can manage the contents of these wallets overall
+- On the wallet view, add a refresh button to pull current state but all some kind of "monitor" or "live view" so that as updates happen we can update the view automatically
