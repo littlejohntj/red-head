@@ -1,6 +1,7 @@
-declare const vscode: any;
 import React from 'react';
 import { Keypair } from '@solana/web3.js';
+
+declare const vscode: any;
 
 interface WalletData {
     keypair: string;
@@ -12,12 +13,12 @@ interface AppProps {
 
 const App: React.FC<AppProps> = ({ walletData }) => {
 
-    Keypair.generate()
+    const keypair = Keypair.fromSecretKey( Uint8Array.from( JSON.parse(walletData.keypair)) )
     
     return (
         <div>
             <h1>Wallet Information</h1>
-            <p>Address: {walletData.keypair}</p>
+            <p>Address: {keypair.publicKey.toBase58()}</p>
         </div>
     );
 };
